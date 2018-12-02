@@ -26,10 +26,11 @@ lengths.sort(function (a, b) {
 });
 
 console.log('Cuts to make: ', lengths);
-console.log('Total: ', lengths.length)
+console.log('Total: ', lengths.length);
+console.log()
 console.log('-'.repeat(30) + '\n');
 
-for (let i = 0; i < lengths.length; i++) {
+for (let i = 0; i <= lengths.length; i++) {
     if ((totalLengthOfCuts + lengths[i]) < maxShaftLength) {
 
         totalLengthOfCuts += lengths[i];
@@ -39,17 +40,16 @@ for (let i = 0; i < lengths.length; i++) {
     } else {
 
         sticks.push(currentStick);
-        console.log('Current stick: ', currentStick)
-
-        console.log(`The next length (${lengths[i]}) exceeds max shaft length (240). Moving to next stick...`)
-        console.log()
+        let drop = 240;
+        currentStick.forEach(cut => drop -= cut);
+        console.log('Current stick: ', currentStick, 'stick drop: ', drop)
 
         // RESET
         currentStick = [];
         totalLengthOfCuts = 0;
-        i--;
+        drop = 0;
+        if (i++ !== lengths.length) i -= 2;
     }
 }
 
-console.log('-'.repeat(30) + '\n');
-console.log('All sticks: ', sticks);
+console.log('\n' + '-'.repeat(30) + '\n');
