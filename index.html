@@ -6,10 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Shaft Optimizer</title>
-    <link rel="stylesheet" href="assets/style.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <!-- Bootstrap 4 -->
     <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css' integrity='sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO'
-        crossorigin='anonymous'>
+    crossorigin='anonymous'>
+    <!-- Local CSS -->
+    <link rel="stylesheet" href="assets/style.css">
 </head>
 
 <body>
@@ -51,6 +54,7 @@
                             <th scope="col">Diameter</th>
                             <th scope="col">Length</th>
                             <th scope="col">Qty</th>
+                            <th scope="col">Remove</th>
                         </tr>
                     </thead>
                     <tbody id="shaftOrders">
@@ -65,7 +69,7 @@
     <div class="row">
         <div class="container-fluid">
             <div class="col">
-                <table class="table table-striped mt-5">
+                <table id="cutsTable" class="table table-striped mt-5">
                     <thead>
                         <tr>
                             <th scope="col">Stick #</th>
@@ -82,11 +86,16 @@
                     </tbody>
                 </table>
                 <h4 id="totalDrop" class="w-100 text-center"></h4>
+                <div class="row justify-content-center" >
+                    <button id="printBtn" class="btn btn-primary">Print</button>
+                </div>
             </div>
         </div>
     </div>
+
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
+    <script src="assets/vendor/printThis.js"></script>
     <script src="assets/js/index.js"></script>
 </body>
 

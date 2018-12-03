@@ -1,13 +1,37 @@
+// TODO: refactor
+// TODO: reset Cuts table before loading new cuts
+
+const maxShaftLength = 240;
 let orders = [];
 let orderId = 0;
+let totalDrop = 0;
+let sticks = [];
+let cuts = [];
+let currentStick = [];
+let totalLengthOfCuts = 0;
+
+// Hide the print button on page load
+$('#printBtn').hide();
+
+$('#printBtn').on('click', function () {
+    $('#cutsTable').css('margin-top', '100px').printThis({
+        header: `
+        <h4>Total stick: ${sticks.length * 240} (${sticks.length} sticks) |
+        Total drop: ${totalDrop} |
+        Yield: ${ Math.floor((1 - (totalDrop / (sticks.length * 240))) * 100) }%</h4>
+        `
+    });
+});
 
 $('#submitOrder').on('click', function (e) {
     e.preventDefault();
 
-    const workOrder = $('#workOrder').val();
+    let workOrder = $('#workOrder').val();
     const shaftDiameter = $('#shaftDiameter').val();
     const shaftLength = $('#shaftLength').val();
     const shaftQty = $('#shaftQty').val();
+
+    if (!workOrder) workOrder = '-';
 
     orders.push({
         o: workOrder,
@@ -24,7 +48,11 @@ $('#submitOrder').on('click', function (e) {
             <td>${shaftDiameter}</td>
             <td>${shaftLength}</td>
             <td>${shaftQty}</td>
-            <td><button class="deleteOrderBtn" orderId=${orderId}>X</button></td>
+            <td>
+                <button class="btn deleteOrderBtn" orderId=${orderId}>
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
         </tr>
     `);
 
@@ -35,11 +63,11 @@ $('#makeCuts').on('click', function (e) {
     e.preventDefault();
 
     let sticks = calculateCuts(orders);
-    let totalDrop = 0;
+    totalDrop = 0;
 
     sticks.forEach((stick, index) => {
         let row = $('<tr>').append(`<td>${index + 1}</td>`)
-        
+
         stick.forEach((cut, index) => {
             let td = $(`<td> ${cut}</td>`);
             $(row).append(td);
@@ -59,18 +87,15 @@ $('#makeCuts').on('click', function (e) {
 
     $('#totalDrop').text(`Total drop: ${totalDrop}`);
 
+    // Show the print button
+    $('#printBtn').show();
 });
 
-$(document).on('click', '.deleteOrderBtn', function() {
+$(document).on('click', '.deleteOrderBtn', function () {
     let orderToDelete = $(this).attr('orderId');
     $(this).parent().parent().remove();
-})
+});
 
-const maxShaftLength = 240;
-let sticks = [];
-let cuts = [];
-let currentStick = [];
-let totalLengthOfCuts = 0;
 function calculateCuts(ordersToCut) {
 
     ordersToCut.forEach(order => {
@@ -111,7 +136,7 @@ function calculateCuts(ordersToCut) {
     return sticks;
 }
 
-function calculateStickDrop (stick) {
+function calculateStickDrop(stick) {
     let drop = 240;
     stick.forEach(cut => drop -= cut);
     return drop;
