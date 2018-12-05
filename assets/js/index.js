@@ -1,5 +1,9 @@
 // TODO: refactor
 // TODO: reset Cuts table before loading new cuts
+// TODO: Table Per Diameter if orders are mixed
+// TODO: Require all form inouts and disable "Enter Orders" button until complete
+// TODO: show orders that are complete in print form 
+// TODO: Allow for more than 4 cuts (dynamically create cut table)
 
 const maxShaftLength = 240;
 let orders = [];
@@ -18,9 +22,10 @@ $('#printBtn').on('click', function () {
         header: `
         <h4>Total stick: ${sticks.length * 240} (${sticks.length} sticks) |
         Total drop: ${totalDrop} |
-        Yield: ${ Math.floor((1 - (totalDrop / (sticks.length * 240))) * 100) }%</h4>
+        Yield: ${ Math.floor((1 - (totalDrop / (sticks.length * 240))) * 100)}%</h4>
         `
     });
+
 });
 
 $('#submitOrder').on('click', function (e) {
@@ -57,11 +62,13 @@ $('#submitOrder').on('click', function (e) {
     `);
 
     $('#orderForm').trigger('reset');
+    $('#shaftDiameter').prop('disabled', true);
+    $('#shaftDiameter').val(shaftDiameter);
 });
 
 $('#makeCuts').on('click', function (e) {
     e.preventDefault();
-
+    if (orders.length === 0) return;
     let sticks = calculateCuts(orders);
     totalDrop = 0;
 
@@ -89,11 +96,20 @@ $('#makeCuts').on('click', function (e) {
 
     // Show the print button
     $('#printBtn').show();
+    $('#shaftOrders').empty();
+    // TODO: Fix diameter entry Bug
+    $('#shaftDiameter').prop('disabled', false);
+    resetOrderTable();
 });
-
+// TODO: Fix Diameter bug after deleting orders
 $(document).on('click', '.deleteOrderBtn', function () {
     let orderToDelete = $(this).attr('orderId');
     $(this).parent().parent().remove();
+    orders.splice((orderToDelete - 1), 1);
+    console.log(orders);
+    if (orders.length === 0) {
+    $('#shaftDiameter').prop('disabled', false);
+    }
 });
 
 function calculateCuts(ordersToCut) {
@@ -140,4 +156,12 @@ function calculateStickDrop(stick) {
     let drop = 240;
     stick.forEach(cut => drop -= cut);
     return drop;
+}
+
+function resetOrderTable() {
+   orders = [];
+   orderId = 0;
+   sticks = [];
+   cuts = [];
+   currentStick = [];
 }
