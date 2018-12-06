@@ -15,11 +15,7 @@
 
 <body>
     <div class="container-fluid">
-        <div>
-            <i class="fas fa-trash"></i>
-        </div>
         <div class="row">
-
             <div class="col-12 col-md-6">
                 <form id="orderForm">
                     <div class="form-group mt-5">
@@ -33,7 +29,7 @@
                             <option>2</option>
                             <option>2.25</option>
                             <option>2.5</option>
-                            <options>3</options>
+                            <option>3</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -44,7 +40,7 @@
                         <label for="shaftQty">Shaft Qty</label>
                         <input type="number" class="form-control" id="shaftQty" placeholder="Shaft Qty">
                     </div>
-                    <button id="submitOrder" type="submit" class="btn btn-primary">Enter Orders</button>
+                    <button id="submitOrder" type="submit" class="btn btn-primary">Enter Order</button>
                 </form>
             </div>
             <div class="col-6">
@@ -63,6 +59,7 @@
                     </tbody>
                 </table>
                 <button id="makeCuts" type="submit" class="btn btn-primary">Make Cuts</button>
+                <button id="clearOrders" type="submit" class="btn">Clear Orders</button>
             </div>
 
         </div>
@@ -91,6 +88,7 @@
                 <h4 id="totalDrop" class="w-100 text-center"></h4>
                 <div class="row justify-content-center">
                     <button id="printBtn" class="btn btn-primary">Print</button>
+                    <button id="clearCutsTable" class="btn">Clear Cuts</button>
                 </div>
             </div>
         </div>
@@ -98,8 +96,9 @@
 
     <!-- jQuery | printThis | Local Javascript -->
     <script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
-    <script src="assets/vendor/printThis.js"></script>
-    <script src="assets/js/index.js"></script>
+    <script src="assets/vendor/print-this/printThis.js"></script>
+    <!-- <script src="assets/js/index.js"></script> -->
+    <script src="./build/app.bundle.js"></script>
 </body>
 
 </html>
