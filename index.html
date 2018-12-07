@@ -6,19 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Shaft Optimizer</title>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    <!-- Bootstrap 4 -->
-    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css' integrity='sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO'
-    crossorigin='anonymous'>
-    <!-- Local CSS -->
-    <link rel="stylesheet" href="assets/style.css">
+
+    <!-- Bootstrap CSS | FontAwesome CSS | Local CSS -->
+    <link rel="stylesheet" href="assets/vendor/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/font-awesome/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
     <div class="container-fluid">
         <div class="row">
-
             <div class="col-12 col-md-6">
                 <form id="orderForm">
                     <div class="form-group mt-5">
@@ -32,7 +29,7 @@
                             <option>2</option>
                             <option>2.25</option>
                             <option>2.5</option>
-                            <options>3</options>
+                            <option>3</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -43,14 +40,14 @@
                         <label for="shaftQty">Shaft Qty</label>
                         <input type="number" class="form-control" id="shaftQty" placeholder="Shaft Qty">
                     </div>
-                    <button id="submitOrder" type="submit" class="btn btn-primary">Enter Orders</button>
+                    <button id="submitOrder" type="submit" class="btn btn-primary">Enter Order</button>
                 </form>
             </div>
             <div class="col-6">
                 <table class="table table-striped mt-5">
                     <thead>
                         <tr>
-                            <th scope="col">Work Order</th>
+                            <th scope="col">Work Order <i class="fa fa-bar-chart" aria-hidden="true"></i></th>
                             <th scope="col">Diameter</th>
                             <th scope="col">Length</th>
                             <th scope="col">Qty</th>
@@ -62,14 +59,16 @@
                     </tbody>
                 </table>
                 <button id="makeCuts" type="submit" class="btn btn-primary">Make Cuts</button>
+                <button id="clearOrders" type="submit" class="btn">Clear Orders</button>
             </div>
 
         </div>
     </div>
     <div class="row">
         <div class="container-fluid">
-            <div class="col">
-                <table id="cutsTable" class="table table-striped mt-5">
+            <div id="cutsTable" class="col">
+                <h5 class="mt-4">Cuts</h5>
+                <table class="table table-striped mt-2">
                     <thead>
                         <tr>
                             <th scope="col">Stick #</th>
@@ -80,25 +79,40 @@
                             <th scope="col">Cut 5</th>
                             <th scope="col">Cut 6</th>
                             <th scope="col">Drop</th>
-<!-- TODO: Refactor will fix drop table lines -->
+                            <!-- TODO: Refactor will fix drop table lines -->
                         </tr>
                     </thead>
                     <tbody id="cutOrder">
 
                     </tbody>
                 </table>
+                <h5 class="mt-2">Orders</h5>
+                <table id="completedOrdersTable" class="table table-striped mt-4">
+                    <thead>
+                        <tr>
+                            <th scope="col">Work Order <i class="fa fa-bar-chart" aria-hidden="true"></i></th>
+                            <th scope="col">Diameter</th>
+                            <th scope="col">Length</th>
+                            <th scope="col">Qty</th>
+                        </tr>
+                    </thead>
+                    <tbody id="completedOrders">
+                        <!-- Dynamic content here. -->
+                    </tbody>
+                </table>
                 <h4 id="totalDrop" class="w-100 text-center"></h4>
-                <div class="row justify-content-center" >
-                    <button id="printBtn" class="btn btn-primary">Print</button>
-                </div>
             </div>
+                    <div class="row justify-content-center mb-4">
+                        <button id="printBtn" class="btn btn-primary">Print</button>
+                        <button id="clearCutsTable" class="btn">Clear Cuts</button>
+                    </div>
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous"></script>
-    <script src="assets/vendor/printThis.js"></script>
-    <script src="assets/js/index.js"></script>
+    <!-- jQuery | printThis | Local Javascript -->
+    <script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="assets/vendor/print-this/printThis.js"></script>
+    <script src="build/app.bundle.js"></script>
 </body>
 
 </html>
