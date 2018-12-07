@@ -61,36 +61,64 @@ $('#makeCuts').on('click', function (e) {
 
     // Empties the cuts table of any previously calculated cuts.
     $('#cutOrder').empty();
-
     // TODO: ** refactor down in this function **
     let sticksToCut = calculateCuts(orders);
-    console.log(sticksToCut)
+
     totalDrop = 0;
-    sticksToCut.forEach(function (stick, index) {
-        let row = $('<tr>').append(`<td>${index + 1}</td>`);
+    const cutTable = $('#cutOrder');
+    addSticksToTable(cutTable, sticksToCut);
+    showCompletedOrdersTable(orders);
+    $('#completedOrdersTable').show();
 
-        stick.forEach(function (cut) {
-            let td = $(`<td> ${cut}</td>`);
-            $(row).append(td);
-        });
+    // TODO: remove
+    // sticksToCut.forEach(function (stick, index) {
+    //     let row = $('<tr>').append(`<td>${index + 1}</td>`);
 
-        if (stick.length < 4) {
-            for (let i = 0; i < 4 - stick.length; i++) {
-                $(row).append('<td>-</td>');
-            }
-        }
+    //     stick.forEach(function (cut) {
+    //         let td = $(`<td> ${cut}</td>`);
+    //         $(row).append(td);
+    //     });
 
-        let stickDrop = calculateStickDrop(stick);
-        totalDrop += stickDrop;
-        $(row).append(`<td>${stickDrop}</td>`)
-        $('#cutOrder').append(row);
-    });
+    //     if (stick.length < 4) {
+    //         for (let i = 0; i < 4 - stick.length; i++) {
+    //             $(row).append('<td>-</td>');
+    //         }
+    //     }
 
-    $('#totalDrop').text(`Total drop: ${totalDrop}`);
+    //     let stickDrop = calculateStickDrop(stick);
+    //     totalDrop += stickDrop;
+    //     $(row).append(`<td>${stickDrop}</td>`)
+    //     $('#cutOrder').append(row);
+    // });
+
+    // $('#totalDrop').text(`Total drop: ${totalDrop}`);
 
     // Show the print button
     $('#printBtn').show();
 });
+
+// TODO: move down by other functions
+function addSticksToTable (table, sticksToCut) {
+    sticksToCut.forEach((stick, index) => {
+        let row = $('<tr>').append(`<td>${index + 1}</td>`);
+
+        // TODO: make dry
+        let cut1 = $(`<td>${(stick[0] == undefined) ? '-':stick[0]}</td>`);
+        let cut2 = $(`<td>${(stick[1] == undefined) ? '-':stick[1]}</td>`);
+        let cut3 = $(`<td>${(stick[2] == undefined) ? '-':stick[2]}</td>`);
+        let cut4 = $(`<td>${(stick[3] == undefined) ? '-':stick[3]}</td>`);
+        let cut5 = $(`<td>${(stick[4] == undefined) ? '-':stick[4]}</td>`);
+        let cut6 = $(`<td>${(stick[5] == undefined) ? '-':stick[5]}</td>`);
+
+        let stickDrop = 0;
+        stick.forEach(cut => stickDrop += cut);
+        let drop = $(`<td>${240 - stickDrop}</td>`);
+        
+        $(row).append(cut1, cut2, cut3, cut4, cut5, cut6, drop);
+
+        $(table).append(row);
+    });
+}
 
 /**
  * On 'Clear Orders' clicked:
@@ -156,6 +184,28 @@ $(document).on('click', '.deleteOrderBtn', function () {
 // FUNCTIONS
 //============================
 
+function showCompletedOrdersTable (orders) {
+    let table = $('#completedOrders');
+
+    orders.forEach(order => {
+        const trRow = $('<tr>').attr('orderId', order.id);
+        const tdWorkOrderNumber = $('<td>').text(order.workOrderNumber);
+        const tdShaftDiameter = $('<td>').text(order.diameter);
+        const tdShaftLength = $('<td>').text(order.length);
+        const tdShaftQuantity = $('<td>').text(order.quantity);
+
+        $(trRow).append(
+            tdWorkOrderNumber,
+            tdShaftDiameter,
+            tdShaftLength,
+            tdShaftQuantity,
+        );
+
+        $(table).append(trRow);
+    
+    });
+}
+
 function addOrderRow(order) {
 
     // Row & table data elements.
@@ -183,10 +233,6 @@ function addOrderRow(order) {
 
     // Return the completed row element.
     return trRow;
-}
-
-function addStickRow(stick) {
-    // TODO: code
 }
 
 function calculateCuts(ordersToCut) {
@@ -254,5 +300,6 @@ function resetOrders() {
 (function init() {
 
     $('#printBtn').hide();
+    $('#completedOrdersTable').hide();
 
 })();
