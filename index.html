@@ -44,7 +44,7 @@
                 </form>
             </div>
             <div class="col-6">
-                <table class="table table-striped mt-5">
+                <table id="enteredOrdersTable" class="table table-striped mt-5">
                     <thead>
                         <tr>
                             <th scope="col">Work Order <i class="fa fa-bar-chart" aria-hidden="true"></i></th>
@@ -67,7 +67,6 @@
     <div class="row">
         <div class="container-fluid">
             <div id="cutsTable" class="col">
-                <h5 class="mt-4">Cuts</h5>
                 <table class="table table-striped mt-2">
                     <thead>
                         <tr>
@@ -79,33 +78,18 @@
                             <th scope="col">Cut 5</th>
                             <th scope="col">Cut 6</th>
                             <th scope="col">Drop</th>
-                            <!-- TODO: Refactor will fix drop table lines -->
                         </tr>
                     </thead>
                     <tbody id="cutOrder">
 
                     </tbody>
                 </table>
-                <h5 class="mt-2">Orders</h5>
-                <table id="completedOrdersTable" class="table table-striped mt-4">
-                    <thead>
-                        <tr>
-                            <th scope="col">Work Order <i class="fa fa-bar-chart" aria-hidden="true"></i></th>
-                            <th scope="col">Diameter</th>
-                            <th scope="col">Length</th>
-                            <th scope="col">Qty</th>
-                        </tr>
-                    </thead>
-                    <tbody id="completedOrders">
-                        <!-- Dynamic content here. -->
-                    </tbody>
-                </table>
                 <h4 id="totalDrop" class="w-100 text-center"></h4>
             </div>
-                    <div class="row justify-content-center mb-4">
-                        <button id="printBtn" class="btn btn-primary">Print</button>
-                        <button id="clearCutsTable" class="btn">Clear Cuts</button>
-                    </div>
+            <div id="cutsTableBtns" class="row justify-content-center mb-4">
+                <button id="printBtn" class="btn btn-primary">Print</button>
+                <button id="clearCutsTable" class="btn">Clear Cuts</button>
+            </div>
         </div>
     </div>
 
