@@ -1,6 +1,5 @@
 import { orders } from './app';
-import { calculateCuts } from './optimizer';
-import { addSticksToTable } from './cutsTable';
+import { cutsTable } from './cutsTable';
 
 export const enteredOrdersTable = {
     init: () => {
@@ -12,14 +11,11 @@ export const enteredOrdersTable = {
             // Return an alert if there are no orders.
             if (orders.length === 0) return alert('No orders to cut.');
 
-            const cutsTable = $('#cutOrder');
-            const sticksToCut = calculateCuts(orders);
-
             // Empties the cuts table of any previously calculated cuts.
-            $('#cutOrder').empty();
+            // $('#cutOrder').empty();
 
-            // Populate the cuts table.
-            addSticksToTable(cutsTable, sticksToCut);
+            const filteredOrders = enteredOrdersTable.filterOrdersByDiameter(orders);
+            cutsTable.createTablesByDiameter(filteredOrders);
 
             // Show the print button & completed orders table.
             $('#cutsTable').show();
@@ -85,5 +81,37 @@ export const enteredOrdersTable = {
 
         // Append the completed row to the table.
         $(table).append(trRow);
+    },
+
+    filterOrdersByDiameter: (orders) => {
+        let filteredOrders = [];
+        let d175 = [];
+        let d200 = [];
+        let d225 = [];
+        let d250 = [];
+
+        orders.forEach(order => {
+            switch (order.diameter) {
+                case 1.75:
+                    d175.push(order);
+                    break;
+                case 2:
+                    d200.push(order);
+                    break;
+                case 2.25:
+                    d225.push(order);
+                    break;
+                case 2.50:
+                    d250.push(order);
+                    break;
+
+                default:
+                    break;
+            }
+        });
+
+        filteredOrders.push(d175, d200, d225, d250);
+
+        return filteredOrders;
     }
 }
