@@ -16,11 +16,11 @@
     <link rel="stylesheet" href="/Shaft-optimzer-2000/assets/vendor/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="/Shaft-optimzer-2000/assets/vendor/font-awesome/css/all.min.css">
     <link rel="stylesheet" href="/Shaft-optimzer-2000/assets/css/style.css">
-    
+
 </head>
 
-<body>
-    <div class="container-fluid">
+<body id="printPage">
+    <div class="container-fluid mt-3">
         <div class="row">
             <div class="col-12 col-md-6">
                 <form id="orderForm">
@@ -31,6 +31,7 @@
                     <div class="form-group">
                         <label for="shaftDiameter">Enter Shaft Diameter</label>
                         <select class="form-control" id="shaftDiameter">
+                            <option>1.5</option>
                             <option>1.75</option>
                             <option>2</option>
                             <option>2.25</option>
@@ -46,33 +47,42 @@
                         <label for="shaftQty">Shaft Qty</label>
                         <input type="number" class="form-control" id="shaftQty" placeholder="Shaft Qty">
                     </div>
-                    <button id="submitOrder" type="submit" class="btn btn-primary">Enter Order</button>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="materialOptions" value="stressProof">
+                        <label class="form-check-label" for="inlineRadio1">Stress Proof</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="materialOptions" value="nonStressProof">
+                        <label class="form-check-label" for="inlineRadio2">Non-Stress Proof</label>
+                    </div>
+                    <button id="submitOrder" type="submit" class="btn btn-primary d-block mt-3">Enter Order</button>
                 </form>
             </div>
-            <div class="col-6">
-                <table id="enteredOrdersTable" class="table table-striped mt-5">
-                    <thead>
-                        <tr>
-                            <th scope="col">Work Order <i class="fa fa-bar-chart" aria-hidden="true"></i></th>
-                            <th scope="col">Diameter</th>
-                            <th scope="col">Length</th>
-                            <th scope="col">Qty</th>
-                            <th scope="col">Remove</th>
-                        </tr>
-                    </thead>
-                    <tbody id="shaftOrders">
+            <div class="col-6 print-this">
+                   <table id="enteredOrdersTable" class="table table-striped mt-3">
+                        <thead>
+                            <tr>
+                                <th scope="col">Work Order <i class="fa fa-bar-chart" aria-hidden="true"></i></th>
+                                <th scope="col">Diameter</th>
+                                <th scope="col">Length</th>
+                                <th scope="col">Qty</th>
+                                <th scope="col">Stress Proof</th>
+                                <th scope="col">Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody id="shaftOrders">
 
-                    </tbody>
-                </table>
-                <button id="makeCuts" type="submit" class="btn btn-primary">Make Cuts</button>
-                <button id="clearOrders" type="submit" class="btn">Clear Orders</button>
+                        </tbody>
+                    </table>
+                <button id="makeCuts" type="submit" class="btn btn-primary doNotPrint">Make Cuts</button>
+                <button id="clearOrders" type="submit" class="btn doNotPrint">Clear Orders</button>
             </div>
 
         </div>
     </div>
     <div class="row">
         <div class="container-fluid">
-            <div id="cutsTable" class="col">
+            <div id="cutsTable" class="col print-this">
                 <h4 id="totalDrop" class="w-100 text-center"></h4>
             </div>
             <div id="cutsTableBtns" class="row justify-content-center mb-4">

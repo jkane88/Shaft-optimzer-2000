@@ -1,3 +1,17 @@
 .deleteOrderBtn:hover {
     color: red;
 }
+#printPage {
+  background: transparent;
+}
+@page {
+    size:auto;
+}
+@media print {
+  .print-this {
+     background: transparent;
+    }
+    .doNotPrint {
+    visibility: hidden;
+}
+}

@@ -18,6 +18,7 @@ const clearOrdersBtn = $('#clearOrders');
 const makeCutsBtn = $('#makeCuts');
 const cutsTables = $('#cutsTable');
 
+
 //============================
 // INITIALIZATION
 //============================
@@ -48,7 +49,8 @@ $(submitOrderBtn).on('click', function (e) {
         workOrderNumber: $('#workOrder').val().trim(),
         diameter: parseFloat($('#shaftDiameter').val().trim()),
         length: parseFloat($('#shaftLength').val().trim()),
-        quantity: parseFloat($('#shaftQty').val().trim())
+        quantity: parseFloat($('#shaftQty').val().trim()),
+        stressProof: $('input[name=materialOptions]:checked').val() === "stressProof" ? "Y" : "N"
     };
 
     addOrder(order);
@@ -61,7 +63,6 @@ $(makeCutsBtn).on('click', function () {
 
     // Return an alert if there are no orders.
     if (orders.length === 0) return alert('No orders to cut.');
-
     const filteredOrders = filterOrdersByDiameter(orders);
     createTablesByDiameter(filteredOrders);
 
@@ -93,6 +94,22 @@ $(clearOrdersBtn).on('click', function () {
     $(ordersTableBody).empty();
 });
 
+// On 'CLEAR CUTS' Clicked:
+$('#clearCutsTable').on('click', function () {
+
+    //Empty Cuts Table
+    $(cutsTables).empty();
+
+    //Reset Order Form
+    $(orderForm).trigger('reset');
+
+    //Set Focus on Word Order Field
+    $('#workOrder').focus();
+
+    //Hide Print & Clear Cuts btns 
+    $('#cutsTableBtns').hide();
+    
+})
 //============================
 // FUNCTIONS
 //============================
@@ -139,6 +156,7 @@ function createOrderRow(order) {
     const tdShaftDiameter = $('<td>').text(order.diameter);
     const tdShaftQuantity = $('<td>').text(order.quantity);
     const tdShaftLength = $('<td>').text(order.length);
+    const tdStressProof = $('<td>').text(order.stressProof);
 
     // Delete button and icon.
     const deleteBtn = $('<button>').addClass('btn deleteOrderBtn mt-1');
@@ -153,40 +171,71 @@ function createOrderRow(order) {
         tdShaftDiameter,
         tdShaftLength,
         tdShaftQuantity,
+        tdStressProof,
         deleteBtn
     );
 
-    // Return the completed row element;
     return trRow;
 }
 
 function filterOrdersByDiameter(orders) {
+    let d150 = [];
     let d175 = [];
     let d200 = [];
     let d225 = [];
     let d250 = [];
+    let d300 = [];
+    let d150sp = [];
+    let d175sp = [];
+    let d200sp = [];
+    let d225sp = [];
+    let d250sp = [];
+    let d300sp = [];
 
     orders.forEach(order => {
         switch (order.diameter) {
+            case 1.5:
+                if (order.stressProof === "Y")
+                    d150sp.push(order);
+                else
+                    d150.push(order);
+                break;
             case 1.75:
-                d175.push(order);
+                if (order.stressProof === "Y")
+                    d175sp.push(order);
+                else
+                    d175.push(order);
                 break;
             case 2:
-                d200.push(order);
+                if (order.stressProof === "Y")
+                    d200sp.push(order);
+                else
+                    d200.push(order);
                 break;
             case 2.25:
-                d225.push(order);
+                if (order.stressProof === "Y")
+                    d225sp.push(order);
+                else
+                    d225.push(order);
                 break;
             case 2.50:
-                d250.push(order);
+                if (order.stressProof === "Y")
+                    d250sp.push(order);
+                else
+                    d250.push(order);
                 break;
-
+            case 3:
+                if (order.stressProof === "Y")
+                    d300sp.push(order);
+                else
+                    d300.push(order);
+                break;
             default:
                 break;
         }
     });
 
-    return [d175, d200, d225, d250];
+    return [d150, d175, d200, d225, d250, d300, d150sp, d175sp, d200sp, d225sp, d250sp, d300sp];
 }
 
 // TODO: refactor
@@ -197,7 +246,7 @@ function createTablesByDiameter(filteredOrders) {
 
         // If array length > 0 ... not to be confused with ordered shaft length.
         if (filteredOrder.length > 0) {
-            let tableHeading = $(`<h4>${filteredOrder[0].diameter}"</h4>`);
+            let tableHeading = $(`<h4>${filteredOrder[0].diameter}" ${filteredOrder[0].stressProof === "Y" ? " - Stressproof" : ""}</h4>`);
             let table = $('<table>').addClass('table table-striped mt-2');
             let tableHeader = $(`\r
             <thead>
@@ -236,7 +285,7 @@ function addSticksToTable(table, sticksToCut) {
         // Add each cut to the row. Cuts that do not exist (i.e. if stick[4] == undefined),
         // a dash is used to indicate no cut.
         for (let i = 0; i < 6; i++) {
-            $(row).append($(`<td>${(stick[i] == undefined) ? '-':stick[i]}</td>`));
+            $(row).append($(`<td>${(stick[i] == undefined) ? '-' : stick[i]}</td>`));
         }
 
         // Create the stick drop data element.
