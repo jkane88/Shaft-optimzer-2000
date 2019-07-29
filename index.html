@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="/Shaft-optimzer-2000/assets/vendor/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="/Shaft-optimzer-2000/assets/vendor/font-awesome/css/all.min.css">
     <link rel="stylesheet" href="/Shaft-optimzer-2000/assets/css/style.css">
-    
+
 </head>
 
 <body>
@@ -31,6 +31,7 @@
                     <div class="form-group">
                         <label for="shaftDiameter">Enter Shaft Diameter</label>
                         <select class="form-control" id="shaftDiameter">
+                            <option>1.5</option>
                             <option>1.75</option>
                             <option>2</option>
                             <option>2.25</option>
@@ -46,7 +47,15 @@
                         <label for="shaftQty">Shaft Qty</label>
                         <input type="number" class="form-control" id="shaftQty" placeholder="Shaft Qty">
                     </div>
-                    <button id="submitOrder" type="submit" class="btn btn-primary">Enter Order</button>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="materialOptions" value="stressProof">
+                        <label class="form-check-label" for="inlineRadio1">Stress Proof</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="materialOptions" value="nonStressProof">
+                        <label class="form-check-label" for="inlineRadio2">Non-Stress Proof</label>
+                    </div>
+                    <button id="submitOrder" type="submit" class="btn btn-primary d-block mt-3">Enter Order</button>
                 </form>
             </div>
             <div class="col-6">
@@ -57,6 +66,7 @@
                             <th scope="col">Diameter</th>
                             <th scope="col">Length</th>
                             <th scope="col">Qty</th>
+                            <th scope="col">Stress Proof</th>
                             <th scope="col">Remove</th>
                         </tr>
                     </thead>

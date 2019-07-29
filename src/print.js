@@ -9,6 +9,8 @@ export const print = {
                     $('#enteredOrdersTable').find('th:last-child').hide();
                     $('#enteredOrdersTable').find('button').hide();
                     $('#enteredOrdersTable').addClass('mb-5');
+                    //Style this cursed document 
+
                 },
                 afterPrint: () => {
                     $('#enteredOrdersTable').find('th:last-child').show();
