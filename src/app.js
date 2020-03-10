@@ -6,6 +6,7 @@ print.init();
 // GLOBAL VARIABLES
 //============================
 let orders = [];
+let isBundleCut = false;
 
 //============================
 // UI ELEMENTS
@@ -17,6 +18,7 @@ const diameterDropdown = $('#shaftDiameter');
 const clearOrdersBtn = $('#clearOrders');
 const makeCutsBtn = $('#makeCuts');
 const cutsTables = $('#cutsTable');
+const chkBundleCut = $('#isBundleCut');
 
 
 //============================
@@ -37,7 +39,6 @@ const cutsTables = $('#cutsTable');
 //============================
 // EVENT LISTENERS
 //============================
-
 $(submitOrderBtn).on('click', function (e) {
 
     // Prevent the form from reloading the page.
@@ -53,6 +54,9 @@ $(submitOrderBtn).on('click', function (e) {
         stressProof: $('input[name=materialOptions]:checked').val() === "stressProof" ? "Y" : "N"
     };
 
+    console.log(order);
+    
+
     addOrder(order);
     updateOrdersTable();
     resetOrderForm();
@@ -64,7 +68,7 @@ $(makeCutsBtn).on('click', function () {
     // Return an alert if there are no orders.
     if (orders.length === 0) return alert('No orders to cut.');
     const filteredOrders = filterOrdersByDiameter(orders);
-    createTablesByDiameter(filteredOrders);
+    createTablesByDiameter(filteredOrders, isBundleCut);
 
     // Show the print button & completed orders table.
     $('#cutsTable').show();
@@ -86,6 +90,9 @@ $(document).on('click', '.deleteOrderBtn', function () {
 
 // On 'CLEAR ORDERS' clicked:
 $(clearOrdersBtn).on('click', function () {
+
+    // Re-enable the bundle cut checkbox
+    $(chkBundleCut).prop('disabled', false);
 
     // Empty the orders array.
     deleteAllOrders();
@@ -109,7 +116,26 @@ $('#clearCutsTable').on('click', function () {
     //Hide Print & Clear Cuts btns 
     $('#cutsTableBtns').hide();
     
-})
+});
+
+// Bundle cut checkbox
+$(chkBundleCut).on('change', function(e) {
+    isBundleCut = e.target.checked;
+    const dropdown = diameterDropdown[0];
+
+    const sizesBundle = [1.5, 2, 2.25];
+    const sizesRegular = [1.5, 1.75, 2, 2.25, 2.5, 3];
+
+    // Clear the dropdown options
+    dropdown.options.length = 0;
+
+    // Pick sizes to use in dropdown based on isBundleCut
+    const sizesArray = isBundleCut ? sizesBundle : sizesRegular;
+    for (let i in sizesArray) {
+        dropdown.options[dropdown.options.length] = new Option(sizesArray[i], sizesArray[i]);
+    }
+});
+
 //============================
 // FUNCTIONS
 //============================
@@ -127,6 +153,12 @@ function resetOrderForm() {
 
     // Set the diameter dropdown to the previous order diameter option.
     $(diameterDropdown).val(previousDiameter);
+
+    // Set the bundle cut option to the previous order option
+    $(chkBundleCut).prop('checked', isBundleCut);
+
+    // Disable bundle cut checkbox so stick and bundle orders don't get mixed up
+    $(chkBundleCut).prop('disabled', true);
 
     // Set focus back to Work Order field.
     $('#workOrder').focus();
@@ -239,7 +271,7 @@ function filterOrdersByDiameter(orders) {
 }
 
 // TODO: refactor
-function createTablesByDiameter(filteredOrders) {
+function createTablesByDiameter(filteredOrders, bundleCut) {
 
     // Loop through the filtered orders. These are arrays of orders with matching diameters.
     filteredOrders.forEach(filteredOrder => {
@@ -248,23 +280,40 @@ function createTablesByDiameter(filteredOrders) {
         if (filteredOrder.length > 0) {
             let tableHeading = $(`<h4>${filteredOrder[0].diameter}" ${filteredOrder[0].stressProof === "Y" ? " - Stressproof" : ""}</h4>`);
             let table = $('<table>').addClass('table table-striped mt-2');
-            let tableHeader = $(`\r
-            <thead>
-                <tr>
-                    <th scope="col">Stick #</th>
-                    <th scope="col">Cut 1</th>
-                    <th scope="col">Cut 2</th>
-                    <th scope="col">Cut 3</th>
-                    <th scope="col">Cut 4</th>
-                    <th scope="col">Cut 5</th>
-                    <th scope="col">Cut 6</th>
-                    <th scope="col">Drop</th>
-                </tr>
-            </thead>`);
+            let tableHeader;
+            if (bundleCut) {
+                tableHeader = $(`\r
+                <thead>
+                    <tr>
+                        <th scope="col">Bundle #</th>
+                        <th scope="col">Cut 1</th>
+                        <th scope="col">Cut 2</th>
+                        <th scope="col">Cut 3</th>
+                        <th scope="col">Cut 4</th>
+                        <th scope="col">Cut 5</th>
+                        <th scope="col">Cut 6</th>
+                        <th scope="col">Drop</th>
+                    </tr>
+                </thead>`);
+            } else {
+                tableHeader = $(`\r
+                <thead>
+                    <tr>
+                        <th scope="col">Stick #</th>
+                        <th scope="col">Cut 1</th>
+                        <th scope="col">Cut 2</th>
+                        <th scope="col">Cut 3</th>
+                        <th scope="col">Cut 4</th>
+                        <th scope="col">Cut 5</th>
+                        <th scope="col">Cut 6</th>
+                        <th scope="col">Drop</th>
+                    </tr>
+                </thead>`);
+            }
 
             // Build the table of optimized cuts for the current diameter.
             let tableBody = $('<tbody>');
-            let sticksToAdd = calculateCuts(filteredOrder);
+            let sticksToAdd = calculateCuts(filteredOrder, bundleCut);
             addSticksToTable(tableBody, sticksToAdd);
             $(table).append(tableHeader, tableBody);
             $(cutsTables).append(tableHeading, table);
@@ -301,13 +350,13 @@ function addSticksToTable(table, sticksToCut) {
 
     });
 
-    totalYield = (1 - (stickDrop / (sticksToCut.length * 240))) * 100;
+    totalYield = (1 - (stickDrop / (sticksToCut.length * 288))) * 100;
     let statString = `Yield: ~${parseFloat(totalYield).toFixed(0)}%`;
     $(table).append(`<p>${statString}</p>`);
 }
 
 function calculateStickDrop(stick) {
-    let drop = 240;
+    let drop = 288;
     stick.forEach(cut => drop -= cut);
     return drop;
 }

@@ -1,12 +1,25 @@
 /**
+ * TODO: BUNDLE CUT OPTION
+ * 
+ * make maxShaftLength 288in (24ft)
+ * - except rug poles (20ft) later
+ * 
+ * get bundle count by shaft size
+ * 
+ * multiply optimizer output by bundle size
+ * 
+ * make ui work with bundle cut option
+ */
+
+/**
  * Takes an array of orders, sorts them, and calculates the optimal cuts to make
  * to minimize drop.
  *
  * @param {Array} ordersToCut
  * @returns Array of optimized sticks/cuts.
  */
- export function calculateCuts(ordersToCut) {
-    const maxShaftLength = 240; // Shaft length in inches.
+export function calculateCuts(ordersToCut, bundleCut) {
+    const maxShaftLength = 288; // Shaft length in inches (24ft).
     const sticks = []; // The array of optimized sticks.
     const cuts = []; // The array of cuts that will be added to each stick.
     let totalLengthOfCuts = 0; // This get accumulated with each cut and compared against maxShaftLength.
@@ -15,10 +28,29 @@
     // Get the cut lengths from each order,
     // then put each cut into the cuts array.
     ordersToCut.forEach(order => {
-        for (let i = 0; i < order.quantity; i++) {
+        let sticksInBundle = 1;
+        if (bundleCut) {
+            switch (order.diameter) {
+                case 1.5:
+                    sticksInBundle = 6;
+                    break;
+                case 2:
+                    sticksInBundle = 5;
+                    break;
+                case 2.25:
+                    sticksInBundle = 4;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        for (let i = 0; i < order.quantity; i += sticksInBundle) {
             cuts.push(order.length);
         }
     });
+
+    
 
     // Sort lengths from longest to shortest. (Setup for greedy method)
     cuts.sort((a, b) => b - a);
@@ -33,7 +65,7 @@
     //          - On failure: Add the current stick to the array of sticks. Go to 2 with a new stick, reset counters.
     // 4. Return the array of sticks, each stick has an array of optimal cuts.
 
-    // Step 1:
+    // Step 1: 
     for (let i = 0; i <= cuts.length; i++) {
 
         // Step 2:
