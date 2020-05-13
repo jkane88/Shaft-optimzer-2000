@@ -1,17 +1,4 @@
 /**
- * TODO: BUNDLE CUT OPTION
- * 
- * make maxShaftLength 288in (24ft)
- * - except rug poles (20ft) later
- * 
- * get bundle count by shaft size
- * 
- * multiply optimizer output by bundle size
- * 
- * make ui work with bundle cut option
- */
-
-/**
  * Takes an array of orders, sorts them, and calculates the optimal cuts to make
  * to minimize drop.
  *
@@ -69,14 +56,14 @@ export function calculateCuts(ordersToCut, bundleCut) {
     for (let i = 0; i <= cuts.length; i++) {
 
         // Step 2:
-        if ((totalLengthOfCuts + cuts[i]) < maxShaftLength) {
+        if ((totalLengthOfCuts + cuts[i]) <= maxShaftLength) {
             totalLengthOfCuts += cuts[i];
             currentStick.push(cuts[i]);
         } else {
 
             // Step 3 (forward-looking):
             for (let j = i; j < cuts.length; j++) {
-                if (totalLengthOfCuts + cuts[j] < maxShaftLength) {
+                if (totalLengthOfCuts + cuts[j] <= maxShaftLength) {
 
                     // Step 3 success:
                     totalLengthOfCuts += cuts[j];

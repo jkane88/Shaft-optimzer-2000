@@ -34,6 +34,12 @@ const chkBundleCut = $('#isBundleCut');
     $('#cutsTable').hide();
     $('#cutsTableBtns').hide();
     $('#completedOrdersTable').hide();
+
+    const helpmsg = "----------------\n" +
+                    "This app uses webpack: using Live Server from VS Code will not work." +
+                    "\n\nPlease use 'npm run start' for development.\n" +
+                    "----------------";
+    console.log(helpmsg);
 })();
 
 //============================
